@@ -1,0 +1,46 @@
+service: newspicks-ranking
+
+frameworkVersion: "=1.30.3"
+
+provider:
+  name: aws
+  runtime: python3.6
+  region: ap-northeast-1
+  stage: ${opt:stage, self:custom.defaultStage}
+  profile: ${opt:profile, self:custom.defaultProfile}
+  environment: ${file(./conf/conf.yml)}
+custom:
+  defaultStage: dev
+  defaultProfile: sls
+
+# you can add statements to the Lambda function's IAM Role here
+#  iamRoleStatements:
+#    - Effect: "Allow"
+#      Action:
+#        - "s3:ListBucket"
+#      Resource: { "Fn::Join" : ["", ["arn:aws:s3:::", { "Ref" : "ServerlessDeploymentBucket" } ] ]  }
+#    - Effect: "Allow"
+#      Action:
+#        - "s3:PutObject"
+#      Resource:
+#        Fn::Join:
+#          - ""
+#          - - "arn:aws:s3:::"
+#            - "Ref" : "ServerlessDeploymentBucket"
+#            - "/*"
+
+plugins:
+  - serverless-python-requirements
+
+functions:
+  getRanking:
+    handler: handler.get_ranking
+    timeout: 10
+    events:
+      - http:
+          path: ranking
+          method: get
+          # キャッシュ
+          # response:
+          #   headers:
+          #     Cache-Control: "'max-age=3600'"
