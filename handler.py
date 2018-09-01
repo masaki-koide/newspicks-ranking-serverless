@@ -28,9 +28,9 @@ def get_ranking(event, context):
     if not soup.select_one('.self'):
         login(session)
 
-    # クエリを構築してリクエスト
+    # クエリを構築して検索
     params = event['queryStringParameters']
-    param_range = params['range'] if params and params['range'] else None
+    param_range = params['range'] if params and 'range' in params else None
     query = urllib.parse.urlencode(dict({'sort': 'picks', 'q': ''}, **createDateQueryDict(param_range)))
     response = session.get(search_url + query)
     soup = BeautifulSoup(response.text, bs_parser)
