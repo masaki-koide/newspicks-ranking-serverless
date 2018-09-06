@@ -37,7 +37,14 @@ def get_ranking(event, context):
 
     # 必要な情報を取得し、resultsに詰める
     cards = soup.select('.news-card-list > .search-result-card')
-    results = [{'title': card.select_one('.news-title').text, 'pick_count': card.select_one('.value').text} for card in cards]
+    results = [
+        {
+            'title': card.select_one('.news-title').text,
+            'pick_count': card.select_one('.value').text,
+            'url': urllib.parse.urljoin(top_url, card.select_one('.news-card > a').get('href'))
+        }
+        for card in cards
+    ]
     # published = card.select_one('.published').text
 
     # TODO: bodyの中身を精査
