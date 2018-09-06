@@ -40,6 +40,7 @@ def get_ranking(event, context):
     results = [{'title': card.select_one('.news-title').text, 'pick_count': card.select_one('.value').text} for card in cards]
     # published = card.select_one('.published').text
 
+    # TODO: bodyの中身を精査
     body = {
         "message": "Go Serverless v1.0! Your function executed successfully!",
         "input": event,
@@ -48,6 +49,9 @@ def get_ranking(event, context):
 
     response = {
         "statusCode": 200,
+        "headers": {
+            "Access-Control-Allow-Origin" : "*"
+        },
         "body": json.dumps(body)
     }
 
